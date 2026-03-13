@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vinted Assistant Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #09090b; }
+        
+        .glass { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); backdrop-filter: blur(20px); }
+        .glass-light { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); }
+        
+        .glow-purple { box-shadow: 0 0 40px rgba(139, 92, 246, 0.15); }
+        .glow-orange { box-shadow: 0 0 30px rgba(249, 115, 22, 0.2); }
+        .glow-green { box-shadow: 0 0 30px rgba(34, 197, 94, 0.2); }
+        
+        .drag-over { border-color: #a78bfa !important; background: rgba(139, 92, 246, 0.1) !important; }
+        
+        .image-preview { position: relative; overflow: hidden; }
+        .image-preview img { transition: transform 0.3s ease, filter 0.3s ease; }
+        .image-preview:hover img { transform: scale(1.08); filter: brightness(0.7); }
+        .remove-btn {
+            position: absolute; top: 6px; right: 6px;
+            background: rgba(239, 68, 68, 0.9); color: white;
+            border-radius: 50%; width: 24px; height: 24px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; opacity: 0; transition: opacity 0.2s;
+            font-size: 12px;
+        }
+        .image-preview:hover .remove-btn { opacity: 1; }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #7c3aed, #a78bfa);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(124, 58, 237, 0.3); }
+        .btn-primary:disabled { opacity: 0.3; transform: none; box-shadow: none; cursor: not-allowed; }
+        
+        .btn-orange {
+            background: linear-gradient(135deg, #ea580c, #f97316);
+            transition: all 0.3s ease;
+        }
+        .btn-orange:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(249, 115, 22, 0.3); }
+        .btn-orange:disabled { opacity: 0.3; transform: none; box-shadow: none; cursor: not-allowed; }
+        
+        .btn-dark {
+            background: linear-gradient(135deg, #374151, #6b7280);
+            transition: all 0.3s ease;
+        }
+        .btn-dark:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(107, 114, 128, 0.3); }
+        .btn-dark:disabled { opacity: 0.3; transform: none; box-shadow: none; cursor: not-allowed; }
+        
+        .btn-vinyl {
+            background: linear-gradient(135deg, #475569, #94a3b8);
+            transition: all 0.3s ease;
+        }
+        .btn-vinyl:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(148, 163, 184, 0.3); }
+        .btn-vinyl:disabled { opacity: 0.3; transform: none; box-shadow: none; cursor: not-allowed; }
+        
+        .btn-modele {
+            background: linear-gradient(135deg, #be185d, #ec4899);
+            transition: all 0.3s ease;
+        }
+        .btn-modele:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(236, 72, 153, 0.3); }
+        .btn-modele:disabled { opacity: 0.3; transform: none; box-shadow: none; cursor: not-allowed; }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #7c3aed, #ec4899, #7c3aed);
+            background-size: 200% 100%;
+            animation: shimmer 2s linear infinite;
+        }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        
+        @keyframes pulse-dot { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+        .pulse-dot { animation: pulse-dot 1.5s ease-in-out infinite; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        
+        .desc-box {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #d1d5db;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .copy-toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
+            background: #22c55e; color: white; padding: 12px 24px; border-radius: 12px;
+            font-weight: 600; font-size: 14px; opacity: 0; transition: all 0.3s ease;
+            z-index: 9999; pointer-events: none;
+        }
+        .copy-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+    </style>
+</head>
+<body class="text-white min-h-screen">
+
+    <!-- Toast -->
+    <div id="copyToast" class="copy-toast">Copié dans le presse-papier !</div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <div class="inline-flex items-center gap-2 bg-violet-500/10 border border-violet-500/20 text-violet-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">
+                Gemini AI Powered
+            </div>
+            <h1 class="text-4xl sm:text-5xl font-black tracking-tight mb-3">
+                <span class="text-white">Vinted</span>
+                <span class="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent"> Assistant</span>
+            </h1>
+            <p class="text-zinc-500 text-base max-w-md mx-auto">Photos & descriptions professionnelles pour vos annonces — jusqu'à 30 articles simultanément</p>
+        </header>
+
+        <!-- Upload Card -->
+        <section class="glass rounded-2xl p-6 sm:p-8 mb-6 glow-purple">
+            <div class="flex items-center justify-between mb-5">
+                <h2 class="text-lg font-bold text-zinc-200">Importer vos articles</h2>
+                <span id="imageCount" class="text-xs font-bold text-violet-400 bg-violet-500/10 border border-violet-500/20 px-3 py-1 rounded-full">0 / 30</span>
+            </div>
+
+            <div id="dropZone" class="border-2 border-dashed border-zinc-700 rounded-xl p-10 text-center cursor-pointer hover:border-violet-500/50 hover:bg-violet-500/5 transition-all duration-300 group">
+                <div class="w-14 h-14 rounded-2xl bg-violet-500/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-violet-500/20 transition">
+                    <svg class="w-7 h-7 text-violet-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.338-2.32 3.75 3.75 0 013.572 5.596A4.5 4.5 0 0118.75 19.5H6.75z"/>
+                    </svg>
+                </div>
+                <p class="text-zinc-300 font-semibold mb-1">Glissez-déposez vos images</p>
+                <p class="text-zinc-600 text-sm mb-4">JPG, PNG, WEBP — max 30 fichiers</p>
+                <button type="button" onclick="document.getElementById('imageUpload').click()" class="btn-primary text-white text-sm px-5 py-2.5 rounded-lg font-semibold">
+                    Parcourir
+                </button>
+                <input id="imageUpload" type="file" class="hidden" accept="image/*" multiple />
+            </div>
+
+            <!-- Preview Grid -->
+            <div id="previewSection" class="hidden mt-6">
+                <div class="flex items-center justify-between mb-3">
+                    <p class="text-sm font-medium text-zinc-400">Aperçu</p>
+                    <button onclick="clearAllImages()" class="text-xs text-red-400 hover:text-red-300 transition">Tout supprimer</button>
+                </div>
+                <div id="previewGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2"></div>
+            </div>
+
+            <!-- Generate Buttons -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
+                <button id="generateCarrelageBtn" onclick="generateImages('carrelage')" disabled
+                    class="btn-orange text-white py-4 rounded-xl font-bold text-sm disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:transform-none flex items-center justify-center gap-2">
+                    <span class="text-lg">🏠</span> Carrelage
+                </button>
+                <button id="generateBoisBtn" onclick="generateImages('bois')" disabled
+                    class="btn-dark text-white py-4 rounded-xl font-bold text-sm disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:transform-none flex items-center justify-center gap-2">
+                    <span class="text-lg">🪵</span> Chêne
+                </button>
+                <button id="generateVinylBtn" onclick="generateImages('vinyl')" disabled
+                    class="btn-vinyl text-white py-4 rounded-xl font-bold text-sm disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:transform-none flex items-center justify-center gap-2">
+                    <span class="text-lg">🩶</span> Vinyl Gris
+                </button>
+                <button id="generateModeleBtn" onclick="generateImages('modele')" disabled
+                    class="btn-modele text-white py-4 rounded-xl font-bold text-sm disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:transform-none flex items-center justify-center gap-2">
+                    <span class="text-lg">👗</span> Modèle
+                </button>
+            </div>
+        </section>
+
+        <!-- Loading State -->
+        <section id="loadingSection" class="hidden glass rounded-2xl p-8 mb-6">
+            <div class="flex flex-col items-center py-6">
+                <div class="flex gap-1.5 mb-5">
+                    <div class="w-2.5 h-2.5 bg-violet-400 rounded-full pulse-dot" style="animation-delay:0s"></div>
+                    <div class="w-2.5 h-2.5 bg-fuchsia-400 rounded-full pulse-dot" style="animation-delay:0.3s"></div>
+                    <div class="w-2.5 h-2.5 bg-pink-400 rounded-full pulse-dot" style="animation-delay:0.6s"></div>
+                </div>
+                <p class="text-zinc-200 text-lg font-bold mb-1">Génération en cours</p>
+                <p id="progressText" class="text-zinc-500 text-sm mb-4">0 / 0</p>
+                <div class="w-full max-w-sm">
+                    <div class="bg-zinc-800 rounded-full h-2 overflow-hidden">
+                        <div id="progressBar" class="progress-bar h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section id="resultsSection" class="hidden">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold text-zinc-200">Résultats</h2>
+                <div class="flex gap-2">
+                    <button id="generateDescBtn" onclick="generateAllDescriptions('M')"
+                        class="bg-violet-600 hover:bg-violet-500 text-white text-sm px-4 py-2.5 rounded-lg font-semibold transition flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 011.037-.443 48.282 48.282 0 005.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"/></svg>
+                        Descriptions Taille M
+                    </button>
+                    <button id="generateDescLBtn" onclick="generateAllDescriptions('L')"
+                        class="bg-fuchsia-600 hover:bg-fuchsia-500 text-white text-sm px-4 py-2.5 rounded-lg font-semibold transition flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 011.037-.443 48.282 48.282 0 005.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"/></svg>
+                        Descriptions Taille L
+                    </button>
+                    <button onclick="downloadAllImages()"
+                        class="bg-emerald-600 hover:bg-emerald-500 text-white text-sm px-4 py-2.5 rounded-lg font-semibold transition flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                        Tout télécharger
+                    </button>
+                </div>
+            </div>
+
+            <div id="resultsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+            <!-- Reset -->
+            <div class="text-center mt-10">
+                <button onclick="resetApp()" class="text-zinc-500 hover:text-zinc-300 text-sm font-medium transition border border-zinc-800 hover:border-zinc-600 px-6 py-2.5 rounded-lg">
+                    Nouvelle session
+                </button>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
