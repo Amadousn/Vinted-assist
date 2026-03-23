@@ -17,18 +17,14 @@ The garment should lie flat but not perfectly symmetrical, with light wrinkles a
 
 Camera angle: slightly above the ground (not perfectly top-down), as if someone leaned over to take the picture by hand.
 
-Lens style: realistic iPhone 15 Pro perspective (wide but natural), with ULTRA-SHARP focus and crystal-clear details.
+Lens style: realistic iPhone 15 Pro perspective (wide but natural).
 
-IMAGE QUALITY REQUIREMENTS (CRITICAL):
-- Ultra-high resolution: 4K quality minimum
-- Razor-sharp focus on the entire garment with zero blur
-- Every fabric texture, stitch, and detail must be perfectly visible and crisp
-- Professional-grade sharpness as if shot with a macro lens
-- Perfect clarity: no motion blur, no soft focus, no haze
-- Rich color depth with accurate, vibrant tones
-- High dynamic range with visible details in shadows and highlights
-- Grain-free, noise-free image quality
-- Every wrinkle, fold, and fabric weave must be clearly distinguishable
+IMAGE QUALITY:
+- Sharp, high-resolution photo
+- Clear focus on the entire garment
+- Visible fabric textures and details
+- Accurate, vibrant colors
+- Professional quality with natural lighting
 
 No walls, no background props, no editing filters — only the clothing item(s) and the tiled floor.
 
@@ -50,19 +46,14 @@ The garment should lie flat but not perfectly symmetrical, with light wrinkles a
 
 Camera angle: slightly above the ground (not perfectly top-down), as if someone leaned over to take the picture by hand.
 
-Lens style: realistic iPhone 15 Pro perspective (wide but natural), with ULTRA-SHARP focus and crystal-clear details.
+Lens style: realistic iPhone 15 Pro perspective (wide but natural).
 
-IMAGE QUALITY REQUIREMENTS (CRITICAL):
-- Ultra-high resolution: 4K quality minimum
-- Razor-sharp focus on the entire garment with zero blur
-- Every fabric texture, stitch, seam, and detail must be perfectly visible and crisp
-- Professional-grade sharpness as if shot with a macro lens
-- Perfect clarity: no motion blur, no soft focus, no haze, no fuzziness
-- Rich color depth with accurate, vibrant tones
-- High dynamic range with visible details in shadows and highlights
-- Grain-free, noise-free, pristine image quality
-- Every wrinkle, fold, pattern, and fabric weave must be clearly distinguishable
-- Pin-sharp edges and contours
+IMAGE QUALITY:
+- Sharp, high-resolution photo
+- Clear focus on the entire garment
+- Visible fabric textures and details
+- Accurate, vibrant colors
+- Professional quality with natural lighting
 
 Only the clothing item(s) and the oak parquet floor must be visible. No person, no mannequin, no walls, no background props, no editing filters.
 
@@ -84,19 +75,14 @@ The garment should lie flat but not perfectly symmetrical, with light wrinkles a
 
 Camera angle: slightly above the ground (not perfectly top-down), as if someone leaned over to take the picture by hand.
 
-Lens style: realistic iPhone 15 Pro perspective (wide but natural), with ULTRA-SHARP focus and crystal-clear details.
+Lens style: realistic iPhone 15 Pro perspective (wide but natural).
 
-IMAGE QUALITY REQUIREMENTS (CRITICAL):
-- Ultra-high resolution: 4K quality minimum
-- Razor-sharp focus on the entire garment with zero blur
-- Every fabric texture, stitch, seam, and detail must be perfectly visible and crisp
-- Professional-grade sharpness as if shot with a macro lens
-- Perfect clarity: no motion blur, no soft focus, no haze, no fuzziness
-- Rich color depth with accurate, vibrant tones
-- High dynamic range with visible details in shadows and highlights
-- Grain-free, noise-free, pristine image quality
-- Every wrinkle, fold, pattern, and fabric weave must be clearly distinguishable
-- Pin-sharp edges and contours
+IMAGE QUALITY:
+- Sharp, high-resolution photo
+- Clear focus on the entire garment
+- Visible fabric textures and details
+- Accurate, vibrant colors
+- Professional quality with natural lighting
 
 Only the clothing item(s) and the grey vinyl wood floor must be visible. No person, no mannequin, no walls, no background props, no editing filters.
 

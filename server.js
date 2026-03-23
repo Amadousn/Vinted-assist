@@ -433,55 +433,34 @@ app.post('/generate-model', async (req, res) => {
         const templateBuffer = fs.readFileSync(TEMPLATE_PATH);
         const templateBase64 = templateBuffer.toString('base64');
         
-        const editPrompt = `STRICT PHOTO EDIT - EXACT GARMENT REPLICATION
+        const editPrompt = `Edit this photo by dressing the mannequin with the garment described below.
 
-You must edit this photo by dressing the mannequin with the garment described below. The garment MUST be replicated EXACTLY as described with ZERO creative interpretation.
-
-GARMENT TO REPLICATE (FOLLOW EXACTLY):
+GARMENT DESCRIPTION:
 ${description}
 
-CRITICAL RULES - NO EXCEPTIONS:
+REQUIREMENTS:
 
-1. GARMENT ACCURACY (ABSOLUTE PRIORITY):
-   - Replicate EVERY detail from the description with 100% accuracy
-   - Exact colors (no shade variations, no color shifts)
-   - Exact fabric type and texture (sequins must be sequins, satin must be satin, etc.)
-   - Exact length (floor-length must touch the floor, knee-length must stop at knee, etc.)
-   - Exact silhouette and fit (bodycon must be fitted, A-line must flare, etc.)
-   - Exact neckline shape (V-neck must be V-shaped, square must be square, etc.)
-   - Exact sleeve type (sleeveless means NO sleeves, long sleeve means FULL length, etc.)
-   - All embellishments must match (sequins, beading, embroidery, buttons, etc.)
-   - All construction details must match (pleats, ruching, draping, seams, etc.)
-   - If the description mentions a slit, belt, bow, or any detail, it MUST be present
+1. GARMENT ACCURACY:
+   - Match exact colors from description
+   - Match exact fabric type and texture
+   - Match exact length (floor-length, knee-length, etc.)
+   - Match exact neckline and sleeve type
+   - Include all embellishments (sequins, beading, etc.)
+   - Include all details (pleats, ruching, slits, etc.)
 
-2. ENVIRONMENT (KEEP IDENTICAL):
-   - Keep the EXACT same room, walls, bed, furniture, wooden floor
-   - Keep the EXACT same lighting (soft, natural, no changes)
-   - Move the mannequin slightly closer to camera for better garment visibility
-   - Mannequin must be centered and prominent
+2. KEEP ENVIRONMENT IDENTICAL:
+   - Same room, walls, bed, furniture, floor
+   - Same lighting and camera angle
+   - One mannequin only, centered
 
-3. WHAT NOT TO CHANGE:
-   - Do NOT add or remove any furniture or objects
-   - Do NOT add a second mannequin
-   - Do NOT change the garment colors or style
-   - Do NOT simplify or omit any garment details
-   - Do NOT add details not mentioned in the description
+3. IMAGE QUALITY:
+   - Sharp, high-resolution photo
+   - Clear fabric details and textures
+   - Accurate colors
+   - Professional iPhone photo quality
+   - Natural lighting
 
-4. PHOTO QUALITY (CRITICAL - VINTED REQUIREMENTS):
-   - ULTRA-HIGH RESOLUTION: 4K quality minimum
-   - RAZOR-SHARP FOCUS: Every detail must be crystal clear with zero blur
-   - PROFESSIONAL SHARPNESS: As if shot with a macro lens
-   - PERFECT CLARITY: No motion blur, no soft focus, no haze, no fuzziness
-   - FABRIC DETAILS: Every stitch, seam, texture, and weave must be perfectly visible
-   - RICH COLORS: Accurate, vibrant color depth with no washed-out tones
-   - HIGH DYNAMIC RANGE: Visible details in both shadows and highlights
-   - GRAIN-FREE: Pristine, noise-free image quality
-   - PIN-SHARP EDGES: Clean, crisp contours and outlines
-   - VISIBLE EMBELLISHMENTS: All sequins, beads, buttons, lace must be clearly distinguishable
-   - Ultra realistic iPhone 16 Pro photo quality
-   - Natural lighting, no filters, no artificial effects
-
-REMEMBER: Your ONLY job is to dress the mannequin with the EXACT garment described. Every single detail matters. The image MUST be ultra-sharp and professional quality to meet Vinted standards. Do not invent, do not simplify, do not approximate.`;
+Replicate the garment exactly as described.`;
 
         const step2Response = await fetch(`${GEMINI_URL}?key=${API_KEY}`, {
             method: 'POST',
