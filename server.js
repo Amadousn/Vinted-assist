@@ -84,6 +84,51 @@ app.post('/generate-image', async (req, res) => {
     }
 });
 
+// Endpoint pour générer image à partir de texte seul (sans image d'entrée)
+app.post('/generate-text-only', async (req, res) => {
+    try {
+        const { prompt } = req.body;
+        
+        console.log(`🎨 Génération texte seul (sans image d'entrée)...`);
+        
+        const response = await fetch(`${GEMINI_URL}?key=${API_KEY}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{ text: prompt }]
+                }],
+                generationConfig: {
+                    responseModalities: ["IMAGE", "TEXT"]
+                },
+                safetySettings: SAFETY_SETTINGS
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('❌ API Error (text-only):', errorData.error?.message);
+            return res.status(response.status).json({ 
+                error: errorData.error?.message || 'API Error' 
+            });
+        }
+
+        const data = await response.json();
+        const candidate = data.candidates?.[0];
+        if (candidate) {
+            console.log(`🎨 finishReason: ${candidate.finishReason}`);
+            const parts = candidate.content?.parts || [];
+            const hasImage = parts.some(p => p.inline_data || p.inlineData);
+            console.log(`🎨 Réponse: ${parts.length} parts, image=${hasImage}`);
+        }
+        res.json(data);
+        
+    } catch (error) {
+        console.error('❌ Server error (text-only):', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Endpoint pour générer les descriptions (utilise le modèle texte)
 const GEMINI_TEXT_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 

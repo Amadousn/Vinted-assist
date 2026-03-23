@@ -382,10 +382,25 @@ async function generateImages(type) {
                         try {
                             return await callGeminiImage(prompt, imageData);
                         } catch (firstErr) {
+                            // Si IMAGE_OTHER, essayer sans image (texte seul)
+                            if (firstErr.message.includes('IMAGE_OTHER') || firstErr.message.includes('refuse')) {
+                                console.log('⚠️ IMAGE_OTHER détecté, génération texte seul...');
+                                return await callGeminiTextOnly(prompt);
+                            }
+                            // Sinon essayer recadrage
                             console.log('⚠️ Premier essai échoué, recadrage sans visage...');
                             const croppedBase64 = await cropImageBase64(imageData.base64, imageData.file.type);
                             const croppedData = { ...imageData, base64: croppedBase64 };
-                            return await callGeminiImage(prompt, croppedData);
+                            try {
+                                return await callGeminiImage(prompt, croppedData);
+                            } catch (secondErr) {
+                                // Si recadrage échoue aussi avec IMAGE_OTHER, texte seul
+                                if (secondErr.message.includes('IMAGE_OTHER') || secondErr.message.includes('refuse')) {
+                                    console.log('⚠️ Recadrage aussi bloqué, génération texte seul...');
+                                    return await callGeminiTextOnly(prompt);
+                                }
+                                throw secondErr;
+                            }
                         }
                     })(),
                     generateSingleDescription(imageData)
@@ -450,6 +465,11 @@ async function callGeminiImage(prompt, imageData) {
         throw new Error('Image bloquée par filtres de sécurité');
     }
     
+    if (finishReason === 'IMAGE_OTHER') {
+        console.error('❌ Bloqué par Gemini (IMAGE_OTHER) - contenu image détecté');
+        throw new Error('Gemini refuse de générer cette image');
+    }
+    
     if (finishReason === 'RECITATION') {
         console.error('❌ Bloqué pour récitation');
         throw new Error('Contenu bloqué (récitation)');
@@ -471,6 +491,39 @@ async function callGeminiImage(prompt, imageData) {
     
     console.error('❌ Aucune image dans parts:', candidate.content?.parts?.length || 0, 'parts');
     throw new Error('Aucune image générée');
+}
+
+async function callGeminiTextOnly(prompt) {
+    const res = await fetch(`${BACKEND_URL}/generate-text-only`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+    });
+
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || res.statusText);
+    }
+
+    const data = await res.json();
+    const candidate = data.candidates?.[0];
+    
+    if (!candidate) {
+        console.error('❌ Pas de candidate (text-only)');
+        throw new Error('Génération texte seul échouée');
+    }
+    
+    if (candidate.content?.parts) {
+        for (const part of candidate.content.parts) {
+            const d = part.inline_data || part.inlineData;
+            if (d) {
+                const blob = base64ToBlob(d.data, d.mime_type || d.mimeType || 'image/png');
+                return URL.createObjectURL(blob);
+            }
+        }
+    }
+    
+    throw new Error('Aucune image générée (text-only)');
 }
 
 async function callGeminiModelWithImage(imageData) {
