@@ -15,11 +15,22 @@ The garment should lie flat but not perfectly symmetrical, with light wrinkles a
 
 Camera angle: slightly above the ground (not perfectly top-down), as if someone leaned over to take the picture by hand.
 
-Lens style: realistic iPhone perspective (wide but natural), with good sharpness and balanced exposure.
+Lens style: realistic iPhone 15 Pro perspective (wide but natural), with ULTRA-SHARP focus and crystal-clear details.
+
+IMAGE QUALITY REQUIREMENTS (CRITICAL):
+- Ultra-high resolution: 4K quality minimum
+- Razor-sharp focus on the entire garment with zero blur
+- Every fabric texture, stitch, and detail must be perfectly visible and crisp
+- Professional-grade sharpness as if shot with a macro lens
+- Perfect clarity: no motion blur, no soft focus, no haze
+- Rich color depth with accurate, vibrant tones
+- High dynamic range with visible details in shadows and highlights
+- Grain-free, noise-free image quality
+- Every wrinkle, fold, and fabric weave must be clearly distinguishable
 
 No walls, no background props, no editing filters — only the clothing item and the tiled floor.
 
-Ensure realistic color tones, natural shadows, and authentic lighting like a genuine amateur photo taken in a home environment.The goal is to keep the same background with no sunlight.`;
+Ensure realistic color tones, natural shadows, and authentic lighting like a genuine amateur photo taken in a home environment. The goal is to keep the same background with no sunlight.`;
 
 const PROMPT_BOIS = `The provided image is a reference for the clothing item ONLY. Whether the garment is shown flat, on a mannequin, worn by a person, or on any background — ignore everything except the garment itself. Extract only the clothing item's design: shape, cut, fabric, color, pattern, and details.
 
@@ -33,7 +44,19 @@ The garment should lie flat but not perfectly symmetrical, with light wrinkles a
 
 Camera angle: slightly above the ground (not perfectly top-down), as if someone leaned over to take the picture by hand.
 
-Lens style: realistic iPhone perspective (wide but natural), with good sharpness and balanced exposure.
+Lens style: realistic iPhone 15 Pro perspective (wide but natural), with ULTRA-SHARP focus and crystal-clear details.
+
+IMAGE QUALITY REQUIREMENTS (CRITICAL):
+- Ultra-high resolution: 4K quality minimum
+- Razor-sharp focus on the entire garment with zero blur
+- Every fabric texture, stitch, seam, and detail must be perfectly visible and crisp
+- Professional-grade sharpness as if shot with a macro lens
+- Perfect clarity: no motion blur, no soft focus, no haze, no fuzziness
+- Rich color depth with accurate, vibrant tones
+- High dynamic range with visible details in shadows and highlights
+- Grain-free, noise-free, pristine image quality
+- Every wrinkle, fold, pattern, and fabric weave must be clearly distinguishable
+- Pin-sharp edges and contours
 
 Only the clothing item and the oak parquet floor must be visible. No person, no mannequin, no walls, no background props, no editing filters.
 
@@ -51,7 +74,19 @@ The garment should lie flat but not perfectly symmetrical, with light wrinkles a
 
 Camera angle: slightly above the ground (not perfectly top-down), as if someone leaned over to take the picture by hand.
 
-Lens style: realistic iPhone perspective (wide but natural), with good sharpness and balanced exposure.
+Lens style: realistic iPhone 15 Pro perspective (wide but natural), with ULTRA-SHARP focus and crystal-clear details.
+
+IMAGE QUALITY REQUIREMENTS (CRITICAL):
+- Ultra-high resolution: 4K quality minimum
+- Razor-sharp focus on the entire garment with zero blur
+- Every fabric texture, stitch, seam, and detail must be perfectly visible and crisp
+- Professional-grade sharpness as if shot with a macro lens
+- Perfect clarity: no motion blur, no soft focus, no haze, no fuzziness
+- Rich color depth with accurate, vibrant tones
+- High dynamic range with visible details in shadows and highlights
+- Grain-free, noise-free, pristine image quality
+- Every wrinkle, fold, pattern, and fabric weave must be clearly distinguishable
+- Pin-sharp edges and contours
 
 Only the clothing item and the grey vinyl wood floor must be visible. No person, no mannequin, no walls, no background props, no editing filters.
 

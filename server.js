@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
@@ -8,9 +9,13 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
-// Gemini API - Clé avec quota niveau 1
-const API_KEY = 'AIzaSyBlxqvB2cN5-uN_OLka6AC6bf4JbN-r1d0';
+// Gemini API - Clé depuis variable d'environnement
+const API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent';
+
+if (!API_KEY) {
+    throw new Error('GEMINI_API_KEY manquante. Ajoute ta clé dans le fichier .env avec le format GEMINI_API_KEY=ta_nouvelle_cle');
+}
 
 const SAFETY_SETTINGS = [
     { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
@@ -462,13 +467,21 @@ CRITICAL RULES - NO EXCEPTIONS:
    - Do NOT simplify or omit any garment details
    - Do NOT add details not mentioned in the description
 
-4. PHOTO QUALITY:
+4. PHOTO QUALITY (CRITICAL - VINTED REQUIREMENTS):
+   - ULTRA-HIGH RESOLUTION: 4K quality minimum
+   - RAZOR-SHARP FOCUS: Every detail must be crystal clear with zero blur
+   - PROFESSIONAL SHARPNESS: As if shot with a macro lens
+   - PERFECT CLARITY: No motion blur, no soft focus, no haze, no fuzziness
+   - FABRIC DETAILS: Every stitch, seam, texture, and weave must be perfectly visible
+   - RICH COLORS: Accurate, vibrant color depth with no washed-out tones
+   - HIGH DYNAMIC RANGE: Visible details in both shadows and highlights
+   - GRAIN-FREE: Pristine, noise-free image quality
+   - PIN-SHARP EDGES: Clean, crisp contours and outlines
+   - VISIBLE EMBELLISHMENTS: All sequins, beads, buttons, lace must be clearly distinguishable
    - Ultra realistic iPhone 16 Pro photo quality
-   - Sharp and crisp, NOT blurry
-   - High resolution with visible fabric texture
    - Natural lighting, no filters, no artificial effects
 
-REMEMBER: Your ONLY job is to dress the mannequin with the EXACT garment described. Every single detail matters. Do not invent, do not simplify, do not approximate.`;
+REMEMBER: Your ONLY job is to dress the mannequin with the EXACT garment described. Every single detail matters. The image MUST be ultra-sharp and professional quality to meet Vinted standards. Do not invent, do not simplify, do not approximate.`;
 
         const step2Response = await fetch(`${GEMINI_URL}?key=${API_KEY}`, {
             method: 'POST',
