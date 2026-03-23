@@ -5,7 +5,9 @@ let uploadedImages = [];
 let generatedImages = [];
 let currentGenerationType = null;
 
-const PROMPT_CARRELAGE = `Create an ultra-realistic amateur-style product photo of a single clothing item (the one I'll provide) laid flat naturally on a tiled floor.
+const PROMPT_CARRELAGE = `Create an ultra-realistic amateur-style product photo of the clothing item(s) I provide laid flat naturally on a tiled floor.
+
+IMPORTANT: If the image shows a complete outfit/set (like a tracksuit with top and bottom, or matching pieces), display ALL pieces together in the photo, arranged naturally as a coordinated set.
 
 The floor must look 100% real, like a normal apartment floor — light beige or neutral ceramic tiles, slightly matte finish, with thin grout lines and soft daylight reflection. The carrelage should feel authentic and lived-in, not studio-perfect.
 
@@ -28,13 +30,17 @@ IMAGE QUALITY REQUIREMENTS (CRITICAL):
 - Grain-free, noise-free image quality
 - Every wrinkle, fold, and fabric weave must be clearly distinguishable
 
-No walls, no background props, no editing filters — only the clothing item and the tiled floor.
+No walls, no background props, no editing filters — only the clothing item(s) and the tiled floor.
+
+If multiple pieces are shown (tracksuit, matching set, coordinated outfit), arrange them together naturally on the floor as they would be displayed for sale.
 
 Ensure realistic color tones, natural shadows, and authentic lighting like a genuine amateur photo taken in a home environment. The goal is to keep the same background with no sunlight.`;
 
-const PROMPT_BOIS = `The provided image is a reference for the clothing item ONLY. Whether the garment is shown flat, on a mannequin, worn by a person, or on any background — ignore everything except the garment itself. Extract only the clothing item's design: shape, cut, fabric, color, pattern, and details.
+const PROMPT_BOIS = `The provided image is a reference for the clothing item(s) ONLY. Whether the garment is shown flat, on a mannequin, worn by a person, or on any background — ignore everything except the garment itself. Extract only the clothing item's design: shape, cut, fabric, color, pattern, and details.
 
-Create an ultra-realistic amateur-style product photo of this single clothing item laid flat naturally on an oak parquet floor.
+IMPORTANT: If the image shows a complete outfit/set (like a tracksuit with top and bottom, matching pieces, or coordinated set), extract ALL pieces and display them together.
+
+Create an ultra-realistic amateur-style product photo of this clothing item(s) laid flat naturally on an oak parquet floor.
 
 The floor must look 100% real, like a normal apartment floor — natural light oak parquet planks with visible wood grain, slightly matte finish, with subtle seams between boards and soft daylight reflection. The parquet should feel authentic and lived-in, not studio-perfect, matching the appearance of a natural oak wooden floor.
 
@@ -58,13 +64,17 @@ IMAGE QUALITY REQUIREMENTS (CRITICAL):
 - Every wrinkle, fold, pattern, and fabric weave must be clearly distinguishable
 - Pin-sharp edges and contours
 
-Only the clothing item and the oak parquet floor must be visible. No person, no mannequin, no walls, no background props, no editing filters.
+Only the clothing item(s) and the oak parquet floor must be visible. No person, no mannequin, no walls, no background props, no editing filters.
+
+If multiple pieces are shown (tracksuit, matching set, coordinated outfit), arrange them together naturally on the floor as a complete set, with pieces positioned close to each other to show they belong together.
 
 Keep the floor evenly lit with soft ambient daylight only, with no direct sunlight, no sun patches, no strong highlights, and no dramatic shadows.`;
 
-const PROMPT_VINYL = `The provided image is a reference for the clothing item ONLY. Whether the garment is shown flat, on a mannequin, worn by a person, or on any background — ignore everything except the garment itself. Extract only the clothing item's design: shape, cut, fabric, color, pattern, and details.
+const PROMPT_VINYL = `The provided image is a reference for the clothing item(s) ONLY. Whether the garment is shown flat, on a mannequin, worn by a person, or on any background — ignore everything except the garment itself. Extract only the clothing item's design: shape, cut, fabric, color, pattern, and details.
 
-Create an ultra-realistic amateur-style product photo of this single clothing item laid flat naturally on a grey vinyl wood floor.
+IMPORTANT: If the image shows a complete outfit/set (like a tracksuit with top and bottom, matching pieces, or coordinated set), extract ALL pieces and display them together.
+
+Create an ultra-realistic amateur-style product photo of this clothing item(s) laid flat naturally on a grey vinyl wood floor.
 
 The floor must look 100% real, like a normal apartment floor — grey vinyl wood planks with subtle wood grain texture, slightly matte finish, with visible seams between planks and soft daylight reflection. The flooring should feel authentic and lived-in, not studio-perfect, resembling modern grey vinyl plank flooring commonly found in apartments.
 
@@ -88,7 +98,9 @@ IMAGE QUALITY REQUIREMENTS (CRITICAL):
 - Every wrinkle, fold, pattern, and fabric weave must be clearly distinguishable
 - Pin-sharp edges and contours
 
-Only the clothing item and the grey vinyl wood floor must be visible. No person, no mannequin, no walls, no background props, no editing filters.
+Only the clothing item(s) and the grey vinyl wood floor must be visible. No person, no mannequin, no walls, no background props, no editing filters.
+
+If multiple pieces are shown (tracksuit, matching set, coordinated outfit), arrange them together naturally on the floor as a complete set, with pieces positioned close to each other to show they belong together.
 
 Keep the floor evenly lit with soft ambient daylight only, with no direct sunlight, no sun patches, no strong highlights, and no dramatic shadows.`;
 
