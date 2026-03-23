@@ -434,8 +434,33 @@ async function callGeminiImage(prompt, imageData) {
     }
 
     const data = await res.json();
-    if (data.candidates?.[0]?.content?.parts) {
-        for (const part of data.candidates[0].content.parts) {
+    
+    // Log détaillé pour debug
+    const candidate = data.candidates?.[0];
+    if (!candidate) {
+        console.error('❌ Pas de candidate. promptFeedback:', data.promptFeedback);
+        throw new Error('Génération bloquée par Gemini');
+    }
+    
+    const finishReason = candidate.finishReason;
+    console.log(`📊 finishReason: ${finishReason}`);
+    
+    if (finishReason === 'SAFETY') {
+        console.error('❌ Bloqué par filtres de sécurité');
+        throw new Error('Image bloquée par filtres de sécurité');
+    }
+    
+    if (finishReason === 'RECITATION') {
+        console.error('❌ Bloqué pour récitation');
+        throw new Error('Contenu bloqué (récitation)');
+    }
+    
+    if (finishReason !== 'STOP' && finishReason !== 'MAX_TOKENS') {
+        console.error(`❌ finishReason inattendu: ${finishReason}`);
+    }
+    
+    if (candidate.content?.parts) {
+        for (const part of candidate.content.parts) {
             const d = part.inline_data || part.inlineData;
             if (d) {
                 const blob = base64ToBlob(d.data, d.mime_type || d.mimeType || 'image/png');
@@ -443,7 +468,9 @@ async function callGeminiImage(prompt, imageData) {
             }
         }
     }
-    throw new Error('Aucune image dans la réponse');
+    
+    console.error('❌ Aucune image dans parts:', candidate.content?.parts?.length || 0, 'parts');
+    throw new Error('Aucune image générée');
 }
 
 async function callGeminiModelWithImage(imageData) {
